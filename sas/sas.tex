@@ -1,0 +1,163 @@
+%
+% latex template for SAS documentation 
+% name: sas.tex 
+% date last modified: 5 may 2018
+% modified by: jerry
+% 
+%
+\documentclass{article}
+
+\usepackage{caption}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{titling}
+
+\begin{document}
+
+\title{
+	\includegraphics{images/um_logo.png} \\
+	\vspace{0.1in}
+	CSC431 \\
+	\vspace{0.2in}
+	\textbf{Download of Public-facing Data} \\
+	\large System Architecture Specification \\
+	Team \#3
+}
+
+\author{
+	Jerry Bonnell
+	\and Gururaj Shriram
+	\and Lixiong Liang
+	\and Heyu Yao
+	\and Re Chang
+}
+
+\date{}
+\maketitle
+
+\clearpage
+\section*{Version History}
+
+\begin{tabularx}{\textwidth}{| l | l | X | l |}
+	\hline
+	\textbf{Version} & \textbf{Date} & \textbf{Author(s)} & \textbf{Change Comments} \\
+	\hline
+	2 & \today & Jerry Bonnell and Gururaj Shriram & Final Draft \\ 
+	\hline
+	1 & April 4, 2018 & Jerry Bonnell and Gururaj Shriram & First Draft \\
+	\hline
+\end{tabularx}
+
+\clearpage
+\tableofcontents
+
+\clearpage
+\listoffigures
+\listoftables
+
+\clearpage
+
+\section{System Analysis}
+
+\subsection{System Overview}
+
+The System will be comprised of four main parts: a data manager, data packager, data converter, and REST controller. The data manager will control the connection to the database and handle database queries. The data packager will package all requested pieces of data into a compressed file if multiple pieces of data are requested. The data converter will convert data from the database into the user's desired format. This format can be any of the supported file formats: kml, esri Shapefile, csv, or geoJSON. The REST controller will manage all of the other aspects of the system and manage the end-to-end pipeline of the downloading process. \\
+
+This pipeline is as follows: (1) the browser submits a download request to the download server which the REST controller listens to, (2) the controller initiates the process of querying data from the database based on the list of layers provided by the browser request, (3) the data is then converted to the requested output format, and (4) the server packages data before submitting it to the browser for local download. \\ 
+
+The three-tier architecture will be used for this project. The client-server tier allows the download server to handle requests from the search team. The database-centric tier queries the database to obtain geospatial data. The business layer performs the conversion and archival of this data, before the client-server tier sends the packaged data back to client.   
+
+\subsection{System Diagram}
+
+\begin{figure}[H]
+	\begin{center}
+		\caption{Download System Diagram}
+		\includegraphics[width=\textwidth]{images/component.pdf}
+	\end{center}
+\end{figure}
+
+\clearpage
+
+\subsection{Actor Identification}
+
+There are three types of human actors: unauthorized users, authorized users, and the administrators. Unauthorized users may only download public pieces of data unless they are granted permission to specific pieces of data from an administrator. Authorized users are allowed to download any piece of data. Administrators are able to download any piece of data as well as approve requests for unauthorized users to download private pieces of data. There are currently no plans for the system to support non-human actors, i.e. with an API. 
+
+\subsection{Design Rationale}
+
+\subsubsection{Architectural Style}
+
+This system, which is part of a larger system, solely exists on the back-end. In designing this, we are using the 3-tier architectural style because our system is a back-end API. This lends itself to a natural division into three tiers: client-server, business, and database-centric. In the client-server tier, the REST controller receives user input, validates the input, and passes that on to be processed by the business tier before responding to the client's request. The business tier requests data from the database-centric tier, converts that data and, finally, archives the converted data and sends it back to the client-server tier. The sole purpose of the database-centric tier is to interface with the database. 
+
+\subsubsection{Design Pattern(s)}
+
+Express is a flexible Node.js framework that provides a robust set of features. We predict that the following design patterns will be primarily used in the following ways: \\
+
+\begin{itemize} 
+	\item Factory: To abstract objects that may share common tasks, such as data management and parsing objects
+	\item Singleton: To maintain a single, consistent reference, such as a database reference
+	\item Middleware: To handle flows that have middleware functions in the system's request-response cycle, such as in the data conversion process
+	\item Stream: To process large amounts of flowing data, such as in the file writing/core download process
+\end{itemize}
+
+
+\subsubsection{Framework}
+
+The web application will run on the \texttt{Node.js} JavaScript engine on the \texttt{Express} framework. \texttt{Express} allows for the successful implementation of a REST API on the backend and will facilitate a lightweight, efficient download pipeline. \\
+
+\textbf{Links:}
+\begin{itemize} 
+	\item \url{https://nodejs.org}
+	\item \url{https://expressjs.com}
+\end{itemize}
+
+\clearpage
+
+\subsection{Cross-cutting Requirements}
+
+We have identified two cross-cutting requirements that are involved in the download pipeline:  
+
+\begin{enumerate}
+\item Performing a \textbf{download}.
+
+Performing a download requires the implementation of a download button on the UI, which calls our download web server, and, at some point, makes contact with the storage database. Therefore, this is a cross-cutting requirement involving three teams that are heavily dependent on each other: search/UI, download, and database. \\
+
+\item Gathering \textbf{geospatial data} from a database.
+
+Further, from the list of layers, our server must be able to gather geospatial data from the Postgres database. This is cross-cutting between the database and our download team.
+
+\end{enumerate}
+
+\clearpage
+
+\section{Functional Design}
+
+Following is the sequence diagram for the download use case. This is the core functionality for this system since it is the only required use case. 
+
+\begin{figure}[H]
+	\begin{center}
+		\caption{Sequence Diagram for the Download Use Case}
+		\includegraphics[width=\textwidth]{images/sequence_diagram.pdf}
+	\end{center}
+\end{figure}
+
+When a user clicks the download button on the search page, an HTTP POST request is sent to our web server, which calls on our REST controller to handle the request and retrieve the output data in the following way. For each file, FileWriter generates a file, then a call is made to DataManager to generate queries that fetch the desired data from the storage database. The database returns the data in its stored format, and FileWriter writes this data to the file. DataConverter is then called to convert the data from the stored format to the desired output format. At the very end, DataPackager is called to package all of the download files into a single URI that is returned to the user.
+
+\clearpage
+
+\section{Structural Design}
+
+The following class diagram represents an overview of the component breakdown in our system. 
+A primary focus for this design is modularity.  
+
+\begin{figure}[H]
+	\begin{center}
+		\caption{Download Class Diagram}
+		\includegraphics[width=\textwidth]{images/class_diagram.pdf}
+	\end{center}
+\end{figure}
+
+\end{document}
+	

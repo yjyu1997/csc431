@@ -1,0 +1,44 @@
+{
+  "name": "download",
+  "version": "1.0.0",
+  "description": "Download System for the CSC 431 Software Engineering Course",
+  "main": "app/app.js",
+  "scripts": {
+    "start": "nodemon --watch app",
+    "test": "mocha app/tests/tests.js --exit --no-deprecation"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jerrybonnell/csc431.git"
+  },
+  "author": "Download Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jerrybonnell/csc431/issues"
+  },
+  "homepage": "https://github.com/jerrybonnell/csc431#readme",
+  "dependencies": {
+    "archiver": "^2.1.1",
+    "async": "^2.6.0",
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
+    "clean-dir": "^1.0.3",
+    "cp-file": "^5.0.0",
+    "del": "^3.0.0",
+    "express": "^4.16.3",
+    "fs": "0.0.1-security",
+    "fs-extra": "^6.0.0",
+    "geojson2": "^0.1.8",
+    "mocha": "^5.0.5",
+    "nodemon": "^1.17.3",
+    "path": "^0.12.7",
+    "pg": "^7.4.1",
+    "pg-promise": "^8.2.2",
+    "reload": "^2.2.2",
+    "request": "^2.85.0",
+    "sinon": "^5.0.3",
+    "supertest": "^3.0.0",
+    "topojson": "^3.0.2"
+  }
+}

@@ -1,0 +1,475 @@
+%
+% latex template for SRS documentation 
+% name: srs.tex 
+% date last modified: 5 may 2018
+% modified by: jerry 
+% 
+%
+\documentclass{article}
+
+\usepackage{caption}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{titling}
+
+\begin{document}
+
+\title{
+	\includegraphics{images/um_logo.png} \\
+	\vspace{0.1in}
+	CSC431 \\
+	\vspace{0.2in}
+	\textbf{Download of Public-facing Data} \\
+	\large Software Requirements Specification \\
+	Team \#3
+}
+
+\author{
+	Jerry Bonnell
+	\and Gururaj Shriram
+	\and Lixiong Liang
+	\and Heyu Yao
+	\and Re Chang
+}
+
+\date{}
+\maketitle
+
+\clearpage
+\section*{Version History}
+
+\begin{tabularx}{\textwidth}{| l | l | X | l |}
+	\hline
+	\textbf{Version} & \textbf{Date} & \textbf{Author(s)} & \textbf{Change Comments} \\
+	\hline
+	2 & \today & Jerry Bonnell and Gururaj Shriram & Final Draft \\
+	\hline
+	1 & March 5, 2018 & Jerry Bonnell, Gururaj Shriram, Re Chang & First Draft \\
+	\hline
+\end{tabularx}
+
+\clearpage
+\tableofcontents
+
+\clearpage
+\listoffigures
+\listoftables
+
+\clearpage
+
+\section{System Requirements}
+
+\subsection{Functional Requirements}
+
+\subsubsection{Download of Public-facing Data}
+
+\begin{table}[H]
+	\caption{Download of Public-facing Data}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}            & Download of Public-facing Data            \\ \hline
+		\textbf{Description}      & Users can choose an output format for
+		queried data and download it locally to their machine. \\ \hline
+		\textbf{Source Scenario}  & FR1                                       \\ \hline
+		\textbf{Priority}         & Mandatory: 0                              \\ \hline
+		\textbf{Precondition(s)}  & List of layers consisting of cadastral,
+		multimedia, and workshop data is passed to the server. Output format
+		is given: one of \texttt{GeoJSON}, esri \texttt{shapefile}, \texttt{kml},
+		or \texttt{CSV} \\ \hline
+		\textbf{Postcondition(s)} & Data is packaged into a zip file and sent
+		back to the browser for a local download. \\ \hline
+		\textbf{Use Case Diagram} & Figure \ref{FR1-use-case}                 \\  \hline
+	\end{tabularx}
+\end{table}
+
+\subsection{Non-Functional Requirements}
+
+\subsubsection{Minimum Simultaneous Downloads}
+
+\begin{table}[H]
+	\caption{Minimum Simultaneous Downloads}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}            & Minimum Simultaneous Downloads          \\ \hline
+		\textbf{Description}      & The download server must handle up to 3
+		simultaneous download requests. \\ \hline
+		\textbf{Source Scenario}  & NFR1                                    \\ \hline
+		\textbf{Priority}         & High: 1                                 \\ \hline
+		\textbf{Applicable FR(s)} & FR1                                     \\ \hline
+	\end{tabularx}
+\end{table}
+
+\pagebreak
+
+\section{System Constraints}
+
+\subsection{Tool Constraints}
+
+\subsubsection{Web Application Framework Constraint}
+
+\textbf{References:}
+\begin{itemize}
+	\item \url{https://nodejs.org}
+	\item \url{https://expressjs.com/}
+\end{itemize}
+
+\begin{table}[H]
+	\caption{Web Application Framework Constraint}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Web Application Framework Constraint              \\ \hline
+		\textbf{Description} & We will be using Express/Node.js as the framework
+		for the backend. This will allow for greater ease of deployment on the
+		server-side. \\ \hline
+		\textbf{Priority}    & Mandatory: 0                                      \\ \hline
+	\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+	\caption{geojson2 Conversion Package}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & geojson2 Conversion Package             \\ \hline
+		\textbf{Description} & We will be using geojson2 which is a geojson exporting utility belt that can convert a geojson object into several other formats. This package uses the ogr2ogr node package to perform the conversions.      \\ \hline
+		\textbf{Priority}    & Mandatory: 0 \\ \hline
+	\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+	\caption{Archiver Packaging Tool}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Archiver Packaging Tool                  \\ \hline
+		\textbf{Description} & We will use the Archiver node module in order to package all of the requested files into a zip or tar file.      \\ \hline
+		\textbf{Priority}    & High: 2 \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsection{Language Constraints}
+
+\subsubsection{Backend REST Framework}
+
+\begin{table}[H]
+	\caption{Backend REST Framework}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Backend REST Framework                      \\ \hline
+		\textbf{Description} & Because we are using the Express framework,
+		Javascript is a requirement. Therefore, the backend will be written
+		in Javascript. \\ \hline
+		\textbf{Priority}    & Mandatory: 0                                \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsection{Platform Constraints}
+
+\subsubsection{Web Service Platform}
+
+\begin{table}[H]
+	\caption{Web Service Platform}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Web Service Platform                      \\ \hline
+		\textbf{Description} & Express/Node.js is, fortunately, platform
+		independent. Further, a platform constraint has not been set by the
+		client for this team.       \\ \hline
+		\textbf{Priority}    & Lowest: 5                                 \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsection{Hardware Constraints}
+
+As we are using Amazon EC2 for deployment, our hardware constraints are set by the free-tier package Amazon provides. \\
+
+\textbf{References:}
+\begin{itemize}
+	\item \url{https://aws.amazon.com/ec2/}
+\end{itemize}
+
+\subsubsection{Storage Constraints}
+
+\begin{table}[H]
+	\caption{Storage Constraints}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Storage Constraints                          \\ \hline
+		\textbf{Description} & Our storage constraint is set by Amazon EC2.
+		However, storage constraints are of minimal priority for this team
+		as there will be nothing stored on disk.        \\ \hline
+		\textbf{Priority}    & Lowest: 5                                    \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsubsection{Computation Constraints}
+
+\begin{table}[H]
+	\caption{Computation Constraints}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Computation Constraints                          \\ \hline
+		\textbf{Description} & Our computation constraint is also set by Amazon
+		EC2. Its free-tier service is ample for this team as our service
+		primarily converts and packages data.          \\ \hline
+		\textbf{Priority}    & Low: 4                                           \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsection{Network Constraints}
+
+\subsubsection{Access Database}
+
+\begin{table}[H]
+	\caption{Access Database}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Access Database                              \\ \hline
+		\textbf{Description} & Our service must be able to query a PostGRES
+		database over the network in order to fetch geospatial and multimedia
+		data.     \\ \hline
+		\textbf{Priority}    & Mandatory: 0                                 \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsubsection{Download Response}
+
+\begin{table}[H]
+	\caption{Download Response}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Download Response                                 \\ \hline
+		\textbf{Description} & Our service must be able to package and send back
+		data to the browser over HTTP protocol for local download. \\ \hline
+		\textbf{Priority}    & Mandatory: 0                                      \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsection{Deployment Constraints}
+
+\subsubsection{AWS EC2 Deployment}
+
+\begin{table}[H]
+	\caption{AWS EC2 Deployment}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & AWS EC2 Deployment                              \\ \hline
+		\textbf{Description} & The web service will be deployed on Amazon EC2.
+		Amazon provides a free-tier service for 12 months that will last the
+		duration of the semester.        \\ \hline
+		\textbf{Priority}    & Medium: 3                                       \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsection{Transition \& Support Constraints}
+
+\subsubsection{Transitionary Requirements}
+
+\begin{table}[H]
+	\caption{Transitionary Requirements}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Transitionary Requirements             \\ \hline
+		\textbf{Description} & Once the user selects the needed data elements and desired file format, our service must download the data and package it in a convenient manner for the user.      \\ \hline
+		\textbf{Priority}    & Mandatory: 0 \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsubsection{Continued Maintenance}
+
+\begin{table}[H]
+	\caption{End of Life}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & End of Life            \\ \hline
+		\textbf{Description} & This service is a term project for the course CSC431. As such, this service will no longer be maintained after the final grading period, and a new team is required to ensure continued development. \\ \hline
+		\textbf{Priority}    & Lowest: 5 \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsection{Budget \& Schedule Constraints}
+
+\subsubsection{Time Constraints}
+
+\begin{table}[H]
+	\caption{Time Constraints}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Time Constraints                           \\ \hline
+		\textbf{Description} & The service must be designed and developed before the end
+			 of the semester: May 7, 2018. A working prototype must be released before
+			this date.      \\ \hline
+		\textbf{Priority}    & Mandatory: 0 \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsubsection{Budget Constraints}
+
+\begin{table}[H]
+	\caption{Budget Constraints}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Budget Constraints                           \\ \hline
+		\textbf{Description} & No funds have been made available by the client. 
+			Therefore, this project has no budget. \\ \hline
+		\textbf{Priority}    & Lowest: 5 \\ \hline
+	\end{tabularx}
+\end{table}
+
+\subsection{Miscellaneous Constraints}
+
+\subsubsection{Performance Constraints}
+
+\begin{table}[H]
+	\caption{Performance Constraints}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}       & Performance Constraints                           \\ \hline
+		\textbf{Description} & The speed and quality of the service is directly dependent on the reliability of the Search results and the access database's schema.      \\ \hline
+		\textbf{Priority}    & Low: 4 \\ \hline
+	\end{tabularx}
+\end{table}
+
+\clearpage
+
+\section{Requirements Modeling}
+
+\subsection{Download Public-Facing Data}
+
+\begin{table}[H]
+	\caption{FR1 Scenario}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Statement of Purpose} & The user is interested in downloading useful
+			information in order to quicken the process of obtaining land grants.         \\ \hline
+		\textbf{Individual}      & A public (unauthorized), registered (authorized), or 
+			administrator user. \\ \hline
+		\textbf{Trigger}  & The user presses a download button.               \\ \hline
+		\textbf{Precondition(s)}  & A user search has been completed, filtered for 
+			workshop, multimedia, and cadastral data, and may have been subsetted. 
+			\\ \hline
+		\textbf{Postcondition(s)}  & A compressed file is downloaded to the user's local 
+			machine.  \\ \hline
+		\textbf{Assumptions} & N/A \\ \hline
+		\textbf{Steps of Scenario} & 
+		\begin{enumerate}
+				\item User A observes a list of results from a completed search.
+				\item User A selects a checkbox for result \#3.
+				\item User A presses the download button.
+				\item A compressed file of data relevant to result \#3 is downloaded locally to User A's machine. 
+			\end{enumerate}           \\  \hline
+	\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+	\caption{Primary Use Case}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Name} & Download of Public-Facing Data Use Case \\ \hline
+		\textbf{Description}      & This is the primary use case for the flow of the download system.  \\ \hline
+		\textbf{Actors}  & The Administrator, Authorized User, and Unauthorized User.  \\ \hline
+		\textbf{Trigger}  & This use case is initiated when a user clicks the download button. \\ \hline
+		\textbf{Precondition(s)}  & The user has received Search results, chosen the files to download, and clicked the download button.  \\ \hline
+		\textbf{Basic Flow} &  
+		\begin{enumerate}
+				\item The user, regardless of their authentication level, selects files to download from the Search results.
+				\item The user clicks the download button.
+				\item For an unauthorized user, the system begins the download process only if the requested data is public. The download of private data requires either an appropriate authentication level or permission from the administrator.
+				\item For an authorized user: the system begins the download process for the requested data.
+				\item If the user has permissions to download the requested data, the system fetches the data from the database and packages it.
+				\item A compressed file of data relevant to the requested data is downloaded locally to the user's machine. 
+			\end{enumerate}           \\  \hline
+		\textbf{Exceptions} & If the user does not have the proper authentication level to download private data, they must request access from an administrator. If there are any errors in the flow, the user may be requested to retry the download. \\  \hline
+		\textbf{Postcondition(s)} & The user has received a compressed file of their requested data, and any database connections created to download the data are closed.  \\  \hline
+		\textbf{Special Requirements} & Download of data requires either an appropriate authentication level or permission from an administrator. Further, in the initial implementation, only 3 simultaneous download requests are permitted. This use case also assumes that the Search results are accurate and the requested data is stored in the database.  \\  \hline
+	\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+	\begin{center}
+		\caption{Download Public-Facing Data}
+		\label{FR1-use-case}
+		\includegraphics[width=\textwidth]{images/download-use-case.pdf}
+	\end{center}
+\end{figure}
+
+\clearpage
+
+\subsection{Minimum Simultaneous Downloads}
+
+\begin{table}[H]
+	\caption{NFR1 Scenario}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Statement of Purpose} & The user would like to be able to download multiple pieces of information together instead of individually.         \\ \hline
+		\textbf{Individual} & A public (unauthorized), registered (authorized), or administrator user. \\ \hline
+		\textbf{Trigger}  & The user selects multiple pieces of information and presses the download button.            \\ \hline
+		\textbf{Precondition(s)}  & A user search has been completed, filtered for 
+			workshop, multimedia, and cadastral data, and may have been subsetted. The user has selected multiple pieces of information to download. \\ \hline
+		\textbf{Postcondition(s)}  & The multiple pieces of information selected for downloading are compressed and downloaded to the user's local machine. \\ \hline
+		\textbf{Assumptions} & One download request is made for each 
+			checkbox selected. Initially, up to 3 checkboxes may be selected at one time. If possible, in a future iteration of the system, more than 3 checkboxes may be selected at one time. \\ \hline
+		\textbf{Steps of Scenario} & 
+		\begin{enumerate}
+				\item User A observes a list of results from a completed search.
+				\item User A selects multiple checkboxes to download.
+				\item User A presses the download button.
+				\item The multiple pieces of information relevant to the selected checkboxes are compressed and downloaded locally to User A's machine.
+			\end{enumerate}  \\  \hline
+	\end{tabularx}
+\end{table}
+
+\clearpage
+
+\subsection{Class Diagram}
+
+\begin{figure}[H]
+	\begin{center}
+		\caption{Class Diagram}
+		\label{class-diagram}
+		\includegraphics[width=\textwidth]{../sas/images/class_diagram.pdf}
+	\end{center}
+\end{figure}
+
+\clearpage
+
+\section{Evolutionary Requirements (TBA)}
+
+At this moment, there are no evolutionary requirements set for this project.
+
+\subsection{Functional Requirements}
+
+
+\subsubsection{Placeholder}
+
+\begin{table}[H]
+	\caption{Placeholder}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}            & Insert title                           \\ \hline
+		\textbf{Description}      & A one or two sentence description      \\ \hline
+		\textbf{Priority}         & Priority from 0 (highest) - 5 (lowest) \\ \hline
+		\textbf{Precondition(s)}  & What needs to happen before            \\ \hline
+		\textbf{Postcondition(s)} & What happens as a result               \\ \hline
+		\textbf{Use Case Diagram} & Link or number, if present             \\  \hline
+	\end{tabularx}
+\end{table}
+
+\subsection{Functional Requirements}
+
+\subsubsection{Placeholder}
+
+\begin{table}[H]
+	\caption{Placeholder}
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Title}            & Insert title                                          \\ \hline
+		\textbf{Description}      & A one or two sentence description                     \\ \hline
+		\textbf{Priority}         & Priority from 0 (highest) - 5 (lowest)                \\ \hline
+		\textbf{Applicable FR(s)} & What functional requirement(s) is this applicable to? \\ \hline
+	\end{tabularx}
+\end{table}
+
+
+\end{document}
